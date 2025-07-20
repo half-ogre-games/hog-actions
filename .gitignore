@@ -14,14 +14,11 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-# Go workspace file
-go.work
-
-# Build artifacts from GitHub Actions
-**/create-issue
-**/find-issue
-**/close-issue
-**/comment-issue
+# Build artifacts from GitHub Actions (compiled binaries)
+create-issue/create-issue
+find-issue/find-issue
+close-issue/close-issue
+comment-issue/comment-issue
 
 # IDE files
 .vscode/

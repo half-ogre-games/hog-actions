@@ -1,0 +1,38 @@
+name: 'Create GitHub Issue'
+description: 'Create a new GitHub issue'
+inputs:
+  github-token:
+    description: 'GitHub token for API access'
+    required: true
+  issue-label:
+    description: 'Primary label to apply to the issue'
+    required: true
+  issue-title:
+    description: 'Title for the issue'
+    required: true
+  issue-body:
+    description: 'Body content for the issue'
+    required: true
+  additional-labels:
+    description: 'Additional labels to apply (comma-separated)'
+    required: false
+    default: ''
+outputs:
+  issue-number:
+    description: 'Number of the created issue'
+    value: ${{ steps.create-issue.outputs.issue-number }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Build and run create-issue
+      shell: bash
+      env:
+        INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
+        INPUT_ISSUE_LABEL: ${{ inputs.issue-label }}
+        INPUT_ISSUE_TITLE: ${{ inputs.issue-title }}
+        INPUT_ISSUE_BODY: ${{ inputs.issue-body }}
+        INPUT_ADDITIONAL_LABELS: ${{ inputs.additional-labels }}
+      run: |
+        cd ${{ github.action_path }}
+        go build -o create-issue main.go
+        ./create-issue

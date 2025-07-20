@@ -1,0 +1,31 @@
+name: 'Close GitHub Issue'
+description: 'Close a GitHub issue with an optional comment'
+inputs:
+  github-token:
+    description: 'GitHub token for API access'
+    required: true
+  issue-number:
+    description: 'Issue number to close'
+    required: true
+  comment-body:
+    description: 'Optional comment to add before closing'
+    required: false
+    default: ''
+  state-reason:
+    description: 'Reason for closing (completed, not_planned, closed)'
+    required: false
+    default: 'closed'
+runs:
+  using: 'composite'
+  steps:
+    - name: Build and run close-issue
+      shell: bash
+      env:
+        INPUT_ISSUE_NUMBER: ${{ inputs.issue-number }}
+        INPUT_COMMENT_BODY: ${{ inputs.comment-body }}
+        INPUT_STATE_REASON: ${{ inputs.state-reason }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: |
+        cd ${{ github.action_path }}
+        go build -o close-issue main.go
+        ./close-issue

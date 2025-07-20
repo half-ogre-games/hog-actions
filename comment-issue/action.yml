@@ -1,0 +1,28 @@
+name: 'Comment on GitHub Issue'
+description: 'Add a comment to an existing GitHub issue'
+inputs:
+  github-token:
+    description: 'GitHub token for API access'
+    required: true
+  issue-number:
+    description: 'Issue number to comment on'
+    required: true
+  comment-body:
+    description: 'Comment content to add'
+    required: true
+outputs:
+  comment-id:
+    description: 'ID of the created comment'
+runs:
+  using: 'composite'
+  steps:
+    - name: Build and run comment-issue
+      shell: bash
+      env:
+        INPUT_ISSUE_NUMBER: ${{ inputs.issue-number }}
+        INPUT_COMMENT_BODY: ${{ inputs.comment-body }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: |
+        cd ${{ github.action_path }}
+        go build -o comment-issue main.go
+        ./comment-issue

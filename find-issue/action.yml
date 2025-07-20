@@ -1,0 +1,29 @@
+name: 'Find GitHub Issue'
+description: 'Find an existing open GitHub issue by title'
+inputs:
+  github-token:
+    description: 'GitHub token for API access'
+    required: true
+  issue-title:
+    description: 'Title to search for in issues'
+    required: true
+outputs:
+  issue-number:
+    description: 'Issue number if found, empty if not found'
+    value: ${{ steps.find-issue.outputs.issue-number }}
+  issue-exists:
+    description: 'Whether an open issue with the title exists (true/false)'
+    value: ${{ steps.find-issue.outputs.issue-exists }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Build and run find-issue
+      id: find-issue
+      shell: bash
+      env:
+        INPUT_ISSUE_TITLE: ${{ inputs.issue-title }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: |
+        cd ${{ github.action_path }}
+        go build -o find-issue main.go
+        ./find-issue

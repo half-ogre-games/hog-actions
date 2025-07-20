@@ -22,7 +22,7 @@ Reference actions from this repository using the standard GitHub Actions syntax:
 
 ```yaml
 - name: Create approval issue
-  uses: half-ogre-games/hog-actions/.github/actions/create-issue@main
+  uses: half-ogre-games/hog-actions/create-issue@main
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     issue-title: "Deployment Approval Required"
