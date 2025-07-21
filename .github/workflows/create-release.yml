@@ -27,8 +27,8 @@ on:
         type: boolean
 
 jobs:
-  tag:
-    name: Create Version Tag
+  release:
+    name: Create Version Tag and Release
     runs-on: ubuntu-latest
     
     permissions:
@@ -41,102 +41,34 @@ jobs:
         ref: ${{ github.event.inputs.branch || github.event.repository.default_branch }}
         fetch-depth: 0
         
-    - name: Get target commit SHA
-      id: commit
-      run: |
-        if [ "${{ github.event.inputs.commit }}" = "HEAD" ] || [ -z "${{ github.event.inputs.commit }}" ]; then
-          COMMIT_SHA=$(git rev-parse HEAD)
-        else
-          COMMIT_SHA="${{ github.event.inputs.commit }}"
-          # Verify the commit exists
-          if ! git cat-file -e "$COMMIT_SHA^{commit}" 2>/dev/null; then
-            echo "Error: Commit $COMMIT_SHA does not exist"
-            exit 1
-          fi
-        fi
-        echo "sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
-        echo "Target commit: $COMMIT_SHA"
-        
-    - name: Get latest version tag
-      id: latest_version
-      uses: ./get-latest-semver-tag
+    - name: Tag and create semver release
+      id: tag-and-create-release
+      uses: ./tag-and-create-semver-release
       with:
-        prefix: 'v'
-        default-version: 'v0.1.0'
-        
-    - name: Calculate new version
-      id: new_version
-      uses: ./get-next-semver
-      with:
-        current-version: ${{ steps.latest_version.outputs.tag }}
+        branch: ${{ github.event.inputs.branch }}
+        commit: ${{ github.event.inputs.commit }}
         increment-major: ${{ github.event.inputs.increment_major }}
         increment-minor: ${{ github.event.inputs.increment_minor }}
         prefix: 'v'
+        default-version: 'v0.1.0'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         
-    - name: Check if tag already exists
+    - name: Generate job summary
       run: |
-        if git tag -l | grep -q "^${{ steps.new_version.outputs.version }}$"; then
-          echo "Error: Tag ${{ steps.new_version.outputs.version }} already exists"
-          exit 1
-        fi
+        cat >> $GITHUB_STEP_SUMMARY << 'EOF'
+        ## 🎉 Release Created Successfully!
         
-    - name: Create and push tags
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
+        | Detail | Value |
+        |--------|-------|
+        | **Previous Version** | `${{ steps.tag-and-create-release.outputs.previous-version }}` |
+        | **New Version** | `${{ steps.tag-and-create-release.outputs.new-version }}` |
+        | **Increment Type** | `${{ steps.tag-and-create-release.outputs.increment-type }}` |
+        | **Target Commit** | `${{ steps.tag-and-create-release.outputs.target-commit }}` |
+        | **Release URL** | [${{ steps.tag-and-create-release.outputs.new-version }}](${{ steps.tag-and-create-release.outputs.release-url }}) |
         
-        # Create and push the semver tag
-        git tag -a "${{ steps.new_version.outputs.version }}" ${{ steps.commit.outputs.sha }} -m "Release ${{ steps.new_version.outputs.version }}"
-        git push origin "${{ steps.new_version.outputs.version }}"
+        ### 📋 Summary
         
-        echo "✅ Created and pushed tag ${{ steps.new_version.outputs.version }} for commit ${{ steps.commit.outputs.sha }}"
+        Successfully created a **${{ steps.tag-and-create-release.outputs.increment-type }} release** from `${{ steps.tag-and-create-release.outputs.previous-version }}` to `${{ steps.tag-and-create-release.outputs.new-version }}`.
         
-        # Create major version tag if major version is 1 or more
-        MAJOR=${{ steps.new_version.outputs.major }}
-        
-        if [ "$MAJOR" -ge 1 ]; then
-          MAJOR_TAG="v${MAJOR}"
-          echo "Creating major version tag: $MAJOR_TAG"
-          
-          # Delete existing major tag if it exists (force update)
-          if git tag -l | grep -q "^${MAJOR_TAG}$"; then
-            git tag -d "$MAJOR_TAG" || true
-            git push origin ":refs/tags/$MAJOR_TAG" || true
-            echo "Deleted existing major tag $MAJOR_TAG"
-          fi
-          
-          # Create and push new major tag
-          git tag -a "$MAJOR_TAG" ${{ steps.commit.outputs.sha }} -m "Major version $MAJOR_TAG (latest: ${{ steps.new_version.outputs.version }})"
-          git push origin "$MAJOR_TAG"
-          
-          echo "✅ Created and pushed major version tag $MAJOR_TAG"
-        else
-          echo "Major version is 0, skipping major version tag creation"
-        fi
-        
-    - name: Create release with auto-generated notes
-      run: |
-        # Create release notes file with metadata
-        cat > release_notes.md << 'EOF'
-        ## What's Changed
-        
-        This release was created from commit ${{ steps.commit.outputs.sha }} on branch `${{ github.event.inputs.branch || github.event.repository.default_branch }}`.
-        
-        ### Version Details
-        - **Previous version**: ${{ steps.latest_version.outputs.found == 'true' && steps.latest_version.outputs.tag || 'none' }}
-        - **New version**: ${{ steps.new_version.outputs.version }}
-        - **Version type**: ${{ steps.new_version.outputs.increment-type }} release
-        
+        The release is now available at: ${{ steps.tag-and-create-release.outputs.release-url }}
         EOF
-        
-        # Create release with auto-generated notes
-        gh release create "${{ steps.new_version.outputs.version }}" \
-          --title "${{ steps.new_version.outputs.version }}" \
-          --notes-file release_notes.md \
-          --generate-notes \
-          --latest \
-          --target "${{ steps.commit.outputs.sha }}"
-        
-        echo "✅ Created release ${{ steps.new_version.outputs.version }} with auto-generated notes"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

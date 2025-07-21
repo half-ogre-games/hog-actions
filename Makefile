@@ -1,4 +1,4 @@
-.PHONY: build clean test help build-create-issue build-find-issue build-close-issue build-comment-issue build-get-latest-semver-tag build-get-next-semver
+.PHONY: build clean test help build-create-issue build-find-issue build-close-issue build-comment-issue build-get-latest-semver-tag build-get-next-semver build-tag-and-create-semver-release
 
 # Default target
 help:
@@ -9,7 +9,7 @@ help:
 	@echo "  help       - Show this help message"
 
 # Build all actions
-build: build-create-issue build-find-issue build-close-issue build-comment-issue build-get-latest-semver-tag build-get-next-semver
+build: build-create-issue build-find-issue build-close-issue build-comment-issue build-get-latest-semver-tag build-get-next-semver build-tag-and-create-semver-release
 
 build-create-issue:
 	@echo "Building create-issue..."
@@ -35,6 +35,10 @@ build-get-next-semver:
 	@echo "Building get-next-semver..."
 	cd get-next-semver && go build -o get-next-semver main.go
 
+build-tag-and-create-semver-release:
+	@echo "Building tag-and-create-semver-release..."
+	cd tag-and-create-semver-release && go build -o tag-and-create-semver-release main.go
+
 # Clean all built binaries
 clean:
 	@echo "Cleaning built binaries..."
@@ -44,6 +48,7 @@ clean:
 	rm -f comment-issue/comment-issue
 	rm -f get-latest-semver-tag/get-latest-semver-tag
 	rm -f get-next-semver/get-next-semver
+	rm -f tag-and-create-semver-release/tag-and-create-semver-release
 
 # Run tests for all actions and go-kit
 test:
@@ -62,4 +67,8 @@ test:
 	@cd get-latest-semver-tag && go test -v ./...
 	@echo "Testing get-next-semver..."
 	@cd get-next-semver && go test -v ./...
+	@echo "Testing semveractions..."
+	@cd internal/semveractions && go test -v ./...
+	@echo "Testing tag-and-create-semver-release..."
+	@cd tag-and-create-semver-release && go test -v ./...
 	@echo "All tests completed successfully!"

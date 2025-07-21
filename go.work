@@ -2,10 +2,12 @@ go 1.24
 
 use (
 	./internal/go-kit
+	./internal/semveractions
 	./create-issue
 	./find-issue
 	./close-issue
 	./comment-issue
 	./get-latest-semver-tag
 	./get-next-semver
+	./tag-and-create-semver-release
 )
