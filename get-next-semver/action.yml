@@ -24,21 +24,28 @@ inputs:
 outputs:
   version:
     description: 'The next semantic version with prefix (e.g., "v1.2.4")'
+    value: ${{ steps.get-next-semver.outputs.version }}
   version-core:
     description: 'The next semantic version without prefix (e.g., "1.2.4")'
+    value: ${{ steps.get-next-semver.outputs.version-core }}
   major:
     description: 'The major version number'
+    value: ${{ steps.get-next-semver.outputs.major }}
   minor:
     description: 'The minor version number'
+    value: ${{ steps.get-next-semver.outputs.minor }}
   patch:
     description: 'The patch version number'
+    value: ${{ steps.get-next-semver.outputs.patch }}
   increment-type:
     description: 'The type of increment performed (major, minor, patch)'
+    value: ${{ steps.get-next-semver.outputs.increment-type }}
 
 runs:
   using: 'composite'
   steps:
     - name: Build and run get-next-semver
+      id: get-next-semver
       shell: bash
       env:
         INPUT_CURRENT_VERSION: ${{ inputs.current-version }}
