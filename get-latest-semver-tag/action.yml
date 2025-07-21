@@ -33,12 +33,15 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Get latest semver tag
+    - name: Build and run get-latest-semver-tag
       shell: bash
-      run: ${{ github.action_path }}/get-latest-semver-tag
       env:
         INPUT_PREFIX: ${{ inputs.prefix }}
         INPUT_DEFAULT_VERSION: ${{ inputs.default-version }}
+      run: |
+        cd ${{ github.action_path }}
+        go build -o get-latest-semver-tag main.go
+        ./get-latest-semver-tag
 
 branding:
   icon: 'tag'
