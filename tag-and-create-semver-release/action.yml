@@ -1,0 +1,75 @@
+name: 'Tag and Create Semver Release'
+description: 'Tag a commit with a semver version and create a GitHub release with auto-generated notes'
+author: 'Half-Ogre Games'
+
+inputs:
+  branch:
+    description: 'Branch to tag (defaults to repository default branch)'
+    required: false
+    default: ''
+  commit:
+    description: 'Commit SHA to tag (defaults to HEAD of branch)'
+    required: false
+    default: 'HEAD'
+  increment-major:
+    description: 'Increment major version'
+    required: false
+    default: 'false'
+    type: boolean
+  increment-minor:
+    description: 'Increment minor version'
+    required: false
+    default: 'false'
+    type: boolean
+  prefix:
+    description: 'Version prefix (e.g., "v" for "v1.2.3")'
+    required: false
+    default: 'v'
+  default-version:
+    description: 'Default version to use if no tags are found'
+    required: false
+    default: 'v0.1.0'
+  github-token:
+    description: 'GitHub token for creating releases'
+    required: true
+
+outputs:
+  previous-version:
+    description: 'The previous version tag (or none if this is the first release)'
+    value: ${{ steps.tag-and-release.outputs.previous-version }}
+  new-version:
+    description: 'The new version tag that was created'
+    value: ${{ steps.tag-and-release.outputs.new-version }}
+  increment-type:
+    description: 'The type of increment performed (major, minor, patch)'
+    value: ${{ steps.tag-and-release.outputs.increment-type }}
+  release-url:
+    description: 'URL of the created GitHub release'
+    value: ${{ steps.tag-and-release.outputs.release-url }}
+  target-commit:
+    description: 'The commit SHA that was tagged'
+    value: ${{ steps.tag-and-release.outputs.target-commit }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Build and run tag-and-create-semver-release
+      id: tag-and-release
+      shell: bash
+      env:
+        INPUT_BRANCH: ${{ inputs.branch }}
+        INPUT_COMMIT: ${{ inputs.commit }}
+        INPUT_INCREMENT_MAJOR: ${{ inputs.increment-major }}
+        INPUT_INCREMENT_MINOR: ${{ inputs.increment-minor }}
+        INPUT_PREFIX: ${{ inputs.prefix }}
+        INPUT_DEFAULT_VERSION: ${{ inputs.default-version }}
+        INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+      run: |
+        cd ${{ github.action_path }}
+        go build -o tag-and-create-semver-release main.go
+        ./tag-and-create-semver-release
+
+branding:
+  icon: 'tag'
+  color: 'purple'

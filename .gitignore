@@ -21,6 +21,7 @@ close-issue/close-issue
 comment-issue/comment-issue
 get-latest-semver-tag/get-latest-semver-tag
 get-next-semver/get-next-semver
+tag-and-create-semver-release/tag-and-create-semver-release
 
 # IDE files
 .vscode/
