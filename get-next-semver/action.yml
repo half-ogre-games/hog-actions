@@ -53,9 +53,11 @@ runs:
         INPUT_INCREMENT_MINOR: ${{ inputs.increment-minor }}
         INPUT_PREFIX: ${{ inputs.prefix }}
       run: |
+        ORIGINAL_DIR=$(pwd)
         cd ${{ github.action_path }}
         go build -o get-next-semver main.go
-        ./get-next-semver
+        cd "$ORIGINAL_DIR"
+        ${{ github.action_path }}/get-next-semver
 
 branding:
   icon: 'arrow-up'
