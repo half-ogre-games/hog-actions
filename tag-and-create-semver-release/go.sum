@@ -1,0 +1,4 @@
+github.com/half-ogre-games/hog-actions/internal/semveractions v0.0.0-20250721173534-824962fd61a1 h1:p5niZVON236lGmUNS7EO28S2oQuSa90u6ZgDGGSsygM=
+github.com/half-ogre-games/hog-actions/internal/semveractions v0.0.0-20250721173534-824962fd61a1/go.mod h1:CSmBiRB8454ugIabbsCV/TWT2vwSSZjnKwCytlrLm2M=
+github.com/half-ogre/go-kit v0.2.0 h1:qRQKapcB0qVen28VPn1V9ucxD+csDwaVIev7YK1qAhU=
+github.com/half-ogre/go-kit v0.2.0/go.mod h1:MSPRSJ1vN0ljh/UvDYmSIvLBONyL5nIPMHu+QtJ/ra8=
