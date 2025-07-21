@@ -15,25 +15,34 @@ inputs:
 outputs:
   tag:
     description: 'The latest semver tag (e.g., "v1.2.3-alpha.1+build.456")'
+    value: ${{ steps.get-latest-semver-tag.outputs.tag }}
   version:
     description: 'The version without prefix (e.g., "1.2.3-alpha.1+build.456")'
+    value: ${{ steps.get-latest-semver-tag.outputs.version }}
   major:
     description: 'The major version number'
+    value: ${{ steps.get-latest-semver-tag.outputs.major }}
   minor:
     description: 'The minor version number'
+    value: ${{ steps.get-latest-semver-tag.outputs.minor }}
   patch:
     description: 'The patch version number'
+    value: ${{ steps.get-latest-semver-tag.outputs.patch }}
   prerelease:
     description: 'The pre-release version (e.g., "alpha.1")'
+    value: ${{ steps.get-latest-semver-tag.outputs.prerelease }}
   build:
     description: 'The build metadata (e.g., "build.456")'
+    value: ${{ steps.get-latest-semver-tag.outputs.build }}
   found:
     description: 'Whether a tag was found (true/false)'
+    value: ${{ steps.get-latest-semver-tag.outputs.found }}
 
 runs:
   using: 'composite'
   steps:
     - name: Build and run get-latest-semver-tag
+      id: get-latest-semver-tag
       shell: bash
       env:
         INPUT_PREFIX: ${{ inputs.prefix }}
