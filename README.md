@@ -39,16 +39,7 @@ For detailed documentation on each action, click the action name in the table ab
 
 ## Versioning
 
-This repository follows [Semantic Versioning (SemVer)](https://semver.org/) for all releases:
-
-- **MAJOR** version for incompatible API changes
-- **MINOR** version for backwards-compatible functionality additions  
-- **PATCH** version for backwards-compatible bug fixes
-
-Each release creates two types of tags:
-
-1. **Full semantic version** (e.g., `v1.2.3`)
-2. **Major version tag** (e.g., `v1`) - automatically updated to point to the latest release within that major version
+This repository use [Semantic Versioning (SemVer)](https://semver.org/) for versioning. Each release will be tagged with its full version (e.g., `v1.2.3`). The latest release of each major version will also be tagged with `v{Major}` (e.g., `v1`) and that tag will move to the latest version as new versions are released.
 
 ## License
 
