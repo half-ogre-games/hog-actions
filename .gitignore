@@ -62,3 +62,6 @@ pids
 # Test coverage
 coverage.txt
 coverage.out
+
+# Go workspace sum file (generated, varies by environment)
+go.work.sum

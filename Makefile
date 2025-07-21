@@ -50,11 +50,9 @@ clean:
 	rm -f get-next-semver/get-next-semver
 	rm -f tag-and-create-semver-release/tag-and-create-semver-release
 
-# Run tests for all actions and go-kit
+# Run tests for all actions
 test:
 	@echo "Running tests..."
-	@echo "Testing go-kit..."
-	@cd internal/go-kit && go test -v ./...
 	@echo "Testing create-issue..."
 	@cd create-issue && go test -v ./...
 	@echo "Testing find-issue..."
