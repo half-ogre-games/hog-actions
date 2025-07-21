@@ -9,10 +9,14 @@ A collection of reusable GitHub Actions for Half-Ogre Games (HOG) repositories.
 
 ## Actions
 
-- **create-issue** - Create GitHub issues with standardized formatting and labels
-- **find-issue** - Search for existing open issues by title to prevent duplicates  
-- **close-issue** - Close issues with optional comments and proper state reasons
-- **comment-issue** - Add automated comments to existing issues
+| Action | Description | Key Inputs | Key Outputs |
+|--------|-------------|------------|-------------|
+| [create-issue](./create-issue) | Create GitHub issues with standardized formatting and labels | `issue-title`, `issue-label`, `github-token` | `issue-number` |
+| [find-issue](./find-issue) | Search for existing open issues by title to prevent duplicates | `issue-title`, `github-token` | `issue-number`, `issue-exists` |
+| [close-issue](./close-issue) | Close issues with optional comments and proper state reasons | `issue-number`, `github-token`, `comment-body` (optional) | `comment-id` |
+| [comment-issue](./comment-issue) | Add automated comments to existing issues | `issue-number`, `comment-body`, `github-token` | `comment-id` |
+| [get-latest-semver-tag](./get-latest-semver-tag) | Get the latest semantic version tag from the current repository (supports pre-release and build metadata) | `prefix` (optional), `default-version` (optional) | `tag`, `version`, `major`, `minor`, `patch`, `prerelease`, `build`, `found` |
+| [get-next-semver](./get-next-semver) | Calculate the next semantic version based on increment type | `current-version`, `increment-major` (optional), `increment-minor` (optional), `prefix` (optional) | `version`, `version-core`, `major`, `minor`, `patch`, `increment-type` |
 
 ## Use
 
@@ -31,55 +35,20 @@ Reference actions from this repository using the standard GitHub Actions syntax:
       Please review and approve this deployment.
 ```
 
-## Reference
+For detailed documentation on each action, click the action name in the table above to view its individual README.
 
-### create-issue
+## Versioning
 
-Creates a new GitHub issue with standardized formatting.
+This repository follows [Semantic Versioning (SemVer)](https://semver.org/) for all releases:
 
-**Inputs:**
-- `github-token` (required) - GitHub token for API access
-- `issue-title` (required) - Title for the issue
-- `issue-label` (required) - Primary label to apply
-- `issue-body` (required) - Issue body content
-- `additional-labels` (optional) - Comma-separated additional labels
+- **MAJOR** version for incompatible API changes
+- **MINOR** version for backwards-compatible functionality additions  
+- **PATCH** version for backwards-compatible bug fixes
 
-**Outputs:**
-- `issue-number` - Number of the created issue
+Each release creates two types of tags:
 
-### find-issue
-
-Searches for existing open issues by title.
-
-**Inputs:**
-- `github-token` (required) - GitHub token for API access
-- `issue-title` (required) - Title to search for
-
-**Outputs:**
-- `issue-number` - Issue number if found
-- `issue-exists` - Boolean indicating if issue exists
-
-### close-issue
-
-Closes a GitHub issue with optional comment.
-
-**Inputs:**
-- `github-token` (required) - GitHub token for API access
-- `issue-number` (required) - Issue number to close
-- `comment-body` (optional) - Comment to add before closing
-- `state-reason` (optional) - Reason for closing (completed, not_planned, closed)
-
-### comment-issue
-
-Adds a comment to an existing GitHub issue.
-
-**Inputs:**
-- `github-token` (required) - GitHub token for API access  
-- `issue-number` (required) - Issue number to comment on
-- `comment-body` (required) - Comment content
-
-**Outputs:**
-- `comment-id` - ID of the created comment
+1. **Full semantic version** (e.g., `v1.2.3`)
+2. **Major version tag** (e.g., `v1`) - automatically updated to point to the latest release within that major version
 
 ## License
 

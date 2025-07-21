@@ -1,0 +1,52 @@
+name: 'Get Next Semver'
+description: 'Calculate the next semantic version based on increment type and current version'
+author: 'Half-Ogre Games'
+
+inputs:
+  current-version:
+    description: 'Current semantic version (e.g., "1.2.3" or "v1.2.3-alpha.1")'
+    required: true
+  increment-major:
+    description: 'Increment major version (resets minor and patch to 0, removes pre-release)'
+    required: false
+    default: 'false'
+    type: boolean
+  increment-minor:
+    description: 'Increment minor version (resets patch to 0, removes pre-release)'
+    required: false
+    default: 'false'
+    type: boolean
+  prefix:
+    description: 'Version prefix to preserve (e.g., "v" for "v1.2.3")'
+    required: false
+    default: 'v'
+
+outputs:
+  version:
+    description: 'The next semantic version with prefix (e.g., "v1.2.4")'
+  version-core:
+    description: 'The next semantic version without prefix (e.g., "1.2.4")'
+  major:
+    description: 'The major version number'
+  minor:
+    description: 'The minor version number'
+  patch:
+    description: 'The patch version number'
+  increment-type:
+    description: 'The type of increment performed (major, minor, patch)'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get next semver
+      shell: bash
+      run: ${{ github.action_path }}/get-next-semver
+      env:
+        INPUT_CURRENT_VERSION: ${{ inputs.current-version }}
+        INPUT_INCREMENT_MAJOR: ${{ inputs.increment-major }}
+        INPUT_INCREMENT_MINOR: ${{ inputs.increment-minor }}
+        INPUT_PREFIX: ${{ inputs.prefix }}
+
+branding:
+  icon: 'arrow-up'
+  color: 'green'

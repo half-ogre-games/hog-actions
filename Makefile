@@ -1,4 +1,4 @@
-.PHONY: build clean test help
+.PHONY: build clean test help build-create-issue build-find-issue build-close-issue build-comment-issue build-get-latest-semver-tag build-get-next-semver
 
 # Default target
 help:
@@ -9,7 +9,7 @@ help:
 	@echo "  help       - Show this help message"
 
 # Build all actions
-build: build-create-issue build-find-issue build-close-issue build-comment-issue
+build: build-create-issue build-find-issue build-close-issue build-comment-issue build-get-latest-semver-tag build-get-next-semver
 
 build-create-issue:
 	@echo "Building create-issue..."
@@ -27,6 +27,14 @@ build-comment-issue:
 	@echo "Building comment-issue..."
 	cd comment-issue && go build -o comment-issue main.go
 
+build-get-latest-semver-tag:
+	@echo "Building get-latest-semver-tag..."
+	cd get-latest-semver-tag && go build -o get-latest-semver-tag main.go
+
+build-get-next-semver:
+	@echo "Building get-next-semver..."
+	cd get-next-semver && go build -o get-next-semver main.go
+
 # Clean all built binaries
 clean:
 	@echo "Cleaning built binaries..."
@@ -34,6 +42,8 @@ clean:
 	rm -f find-issue/find-issue
 	rm -f close-issue/close-issue
 	rm -f comment-issue/comment-issue
+	rm -f get-latest-semver-tag/get-latest-semver-tag
+	rm -f get-next-semver/get-next-semver
 
 # Run tests for all actions and go-kit
 test:
@@ -48,4 +58,8 @@ test:
 	@cd close-issue && go test -v ./...
 	@echo "Testing comment-issue..."
 	@cd comment-issue && go test -v ./...
+	@echo "Testing get-latest-semver-tag..."
+	@cd get-latest-semver-tag && go test -v ./...
+	@echo "Testing get-next-semver..."
+	@cd get-next-semver && go test -v ./...
 	@echo "All tests completed successfully!"
