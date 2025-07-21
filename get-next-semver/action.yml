@@ -38,14 +38,17 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Get next semver
+    - name: Build and run get-next-semver
       shell: bash
-      run: ${{ github.action_path }}/get-next-semver
       env:
         INPUT_CURRENT_VERSION: ${{ inputs.current-version }}
         INPUT_INCREMENT_MAJOR: ${{ inputs.increment-major }}
         INPUT_INCREMENT_MINOR: ${{ inputs.increment-minor }}
         INPUT_PREFIX: ${{ inputs.prefix }}
+      run: |
+        cd ${{ github.action_path }}
+        go build -o get-next-semver main.go
+        ./get-next-semver
 
 branding:
   icon: 'arrow-up'
