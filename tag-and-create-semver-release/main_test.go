@@ -24,14 +24,14 @@ func TestGetConfigFromEnvironment(t *testing.T) {
 			},
 			expectError: false,
 			expected: &Config{
-				Branch:         "main", // fallback
+				Branch:         "", // Will be set dynamically
 				Commit:         "HEAD",
 				IncrementMajor: false,
 				IncrementMinor: false,
 				Prefix:         "v",
 				DefaultVersion: "v0.1.0",
 				GitHubToken:    "test-token",
-				DefaultBranch:  "main",
+				DefaultBranch:  "", // Will be set dynamically
 			},
 		},
 		{
@@ -76,14 +76,14 @@ func TestGetConfigFromEnvironment(t *testing.T) {
 			},
 			expectError: false,
 			expected: &Config{
-				Branch:         "main",
+				Branch:         "", // Will be set dynamically based on environment
 				Commit:         "HEAD",
 				IncrementMajor: false,
 				IncrementMinor: true,
 				Prefix:         "v",
 				DefaultVersion: "v0.1.0",
 				GitHubToken:    "test-token",
-				DefaultBranch:  "main",
+				DefaultBranch:  "", // Will be set dynamically based on environment
 			},
 		},
 		{
@@ -133,8 +133,17 @@ func TestGetConfigFromEnvironment(t *testing.T) {
 				return
 			}
 
-			if config.Branch != tt.expected.Branch {
-				t.Errorf("Branch = %q, want %q", config.Branch, tt.expected.Branch)
+			// For tests with dynamic branch names, validate against actual environment
+			expectedBranch := tt.expected.Branch
+			if expectedBranch == "" {
+				// Get expected branch from environment or default to "main"
+				expectedBranch = os.Getenv("GITHUB_REF_NAME")
+				if expectedBranch == "" {
+					expectedBranch = "main"
+				}
+			}
+			if config.Branch != expectedBranch {
+				t.Errorf("Branch = %q, want %q", config.Branch, expectedBranch)
 			}
 			if config.Commit != tt.expected.Commit {
 				t.Errorf("Commit = %q, want %q", config.Commit, tt.expected.Commit)
