@@ -1,0 +1,45 @@
+name: 'Get Latest Semver Tag'
+description: 'Get the latest semantic version tag from the current GitHub repository'
+author: 'Half-Ogre Games'
+
+inputs:
+  prefix:
+    description: 'Tag prefix to filter by (e.g., "v" for "v1.0.0")'
+    required: false
+    default: 'v'
+  default-version:
+    description: 'Default version to return if no tags are found'
+    required: false
+    default: 'v0.0.0'
+
+outputs:
+  tag:
+    description: 'The latest semver tag (e.g., "v1.2.3-alpha.1+build.456")'
+  version:
+    description: 'The version without prefix (e.g., "1.2.3-alpha.1+build.456")'
+  major:
+    description: 'The major version number'
+  minor:
+    description: 'The minor version number'
+  patch:
+    description: 'The patch version number'
+  prerelease:
+    description: 'The pre-release version (e.g., "alpha.1")'
+  build:
+    description: 'The build metadata (e.g., "build.456")'
+  found:
+    description: 'Whether a tag was found (true/false)'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get latest semver tag
+      shell: bash
+      run: ${{ github.action_path }}/get-latest-semver-tag
+      env:
+        INPUT_PREFIX: ${{ inputs.prefix }}
+        INPUT_DEFAULT_VERSION: ${{ inputs.default-version }}
+
+branding:
+  icon: 'tag'
+  color: 'blue'

@@ -6,4 +6,6 @@ use (
 	./find-issue
 	./close-issue
 	./comment-issue
+	./get-latest-semver-tag
+	./get-next-semver
 )
