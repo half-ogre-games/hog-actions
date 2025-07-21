@@ -24,6 +24,8 @@ runs:
         INPUT_ISSUE_TITLE: ${{ inputs.issue-title }}
         INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
       run: |
+        ORIGINAL_DIR=$(pwd)
         cd ${{ github.action_path }}
         go build -o find-issue main.go
-        ./find-issue
+        cd "$ORIGINAL_DIR"
+        ${{ github.action_path }}/find-issue

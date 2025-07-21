@@ -66,9 +66,11 @@ runs:
         INPUT_GITHUB_TOKEN: ${{ inputs.github-token }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
       run: |
+        ORIGINAL_DIR=$(pwd)
         cd ${{ github.action_path }}
         go build -o tag-and-create-semver-release main.go
-        ./tag-and-create-semver-release
+        cd "$ORIGINAL_DIR"
+        ${{ github.action_path }}/tag-and-create-semver-release
 
 branding:
   icon: 'tag'

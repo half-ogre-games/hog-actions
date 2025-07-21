@@ -48,9 +48,11 @@ runs:
         INPUT_PREFIX: ${{ inputs.prefix }}
         INPUT_DEFAULT_VERSION: ${{ inputs.default-version }}
       run: |
+        ORIGINAL_DIR=$(pwd)
         cd ${{ github.action_path }}
         go build -o get-latest-semver-tag main.go
-        ./get-latest-semver-tag
+        cd "$ORIGINAL_DIR"
+        ${{ github.action_path }}/get-latest-semver-tag
 
 branding:
   icon: 'tag'

@@ -33,6 +33,8 @@ runs:
         INPUT_ISSUE_BODY: ${{ inputs.issue-body }}
         INPUT_ADDITIONAL_LABELS: ${{ inputs.additional-labels }}
       run: |
+        ORIGINAL_DIR=$(pwd)
         cd ${{ github.action_path }}
         go build -o create-issue main.go
-        ./create-issue
+        cd "$ORIGINAL_DIR"
+        ${{ github.action_path }}/create-issue
