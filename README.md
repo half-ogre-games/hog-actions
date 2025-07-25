@@ -1,11 +1,11 @@
-# Half-Ogre Games (HOG) GitHub Actions
+# Half-Ogre's GitHub Actions
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub Actions](https://img.shields.io/badge/GitHub-Actions-blue.svg)](https://github.com/features/actions)
 
-A collection of reusable GitHub Actions for Half-Ogre Games (HOG) repositories.
+A collection of reusable GitHub Actions I use across my projects.
 
-> **Note:** This repository is public and primarily designed for internal HOG development workflows. However, pull requests and issues are welcome.
+> **Note:** While this repository is public, it's designed for and used on my perrsonal projects. That said, pull requests and issues are welcome.
 
 ## Actions
 
@@ -26,7 +26,7 @@ Reference actions from this repository using the standard GitHub Actions syntax:
 
 ```yaml
 - name: Create approval issue
-  uses: half-ogre-games/hog-actions/create-issue@main
+  uses: half-ogre/github-actions/create-issue@main
   with:
     github-token: ${{ secrets.GITHUB_TOKEN }}
     issue-title: "Deployment Approval Required"
@@ -39,7 +39,7 @@ For detailed documentation on each action, click the action name in the table ab
 
 ## Versioning
 
-This repository use [Semantic Versioning (SemVer)](https://semver.org/) for versioning. Each release will be tagged with its full version (e.g., `v1.2.3`). The latest release of each major version will also be tagged with `v{Major}` (e.g., `v1`) and that tag will move to the latest version as new versions are released.
+This repository uses [Semantic Versioning (SemVer)](https://semver.org/) for versioning. Each release will be tagged with its full version (e.g., `v1.2.3`). The latest release of each major version will also be tagged with `v{Major}` (e.g., `v1`) and that tag will move to the latest version as new versions are released.
 
 ## License
 
@@ -47,7 +47,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-**No Support Guarantee:** This repository is provided as-is without any warranty or support guarantee, as outlined in the [LICENSE](LICENSE.md). Half-Ogre Games will review issues and pull requests as capacity allows, but response times are not guaranteed.
+**No Support Guarantee:** This repository is provided as-is without any warranty or support guarantee, as outlined in the [LICENSE](LICENSE.md). I will review issues and pull requests as my time allows, but response times are not guaranteed.
 
 For questions, issues, or feature requests:
 
